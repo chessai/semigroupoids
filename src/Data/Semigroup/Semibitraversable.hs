@@ -9,17 +9,17 @@
 -- Portability :  portable
 --
 ----------------------------------------------------------------------------
-module Data.Semigroup.Bitraversable
-  ( Bitraversable1(..)
-  , bifoldMap1Default
+module Data.Semigroup.Semibitraversable
+  ( Semibitraversable(..)
+  , semibifoldMapDefault
   ) where
 
 import Control.Applicative
 #if !(MIN_VERSION_base(4,11,0))
 import Data.Semigroup
 #endif
-import Data.Semigroup.Traversable.Class
+import Data.Semigroup.Semitraversable.Class
 
-bifoldMap1Default :: (Bitraversable1 t, Semigroup m) => (a -> m) -> (b -> m) -> t a b -> m
-bifoldMap1Default f g = getConst . bitraverse1 (Const . f) (Const . g)
-{-# INLINE bifoldMap1Default #-}
+semibifoldMapDefault :: (Semibitraversable t, Semigroup m) => (a -> m) -> (b -> m) -> t a b -> m
+semibifoldMapDefault f g = getConst . semibitraverse (Const . f) (Const . g)
+{-# INLINE semibifoldMapDefault #-}

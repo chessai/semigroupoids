@@ -1,0 +1,78 @@
+#!/bin/bash
+set -e
+
+git checkout -b "semigroupoids-v6-name-changes" || git checkout "semigroupoids-v6-name-changes"
+
+# FIX DIR STRUCTURE
+#mv src/Data/Bifunctor/Apply.hs src/Data/Bifunctor/Semiapplicative.hs
+
+#mv src/Data/Functor/Apply.hs src/Data/Functor/Semiapplicative.hs
+#mv src/Data/Functor/Bind.hs  src/Data/Functor/Semimonad.hs
+
+#cp -r src/Data/Functor/Bind/ src/Data/Functor/Semimonad/
+#rm -rf src/Data/Functor/Bind/
+
+#mv src/Data/Semigroup/Bifoldable.hs src/Data/Semigroup/Semibifoldable.hs
+#mv src/Data/Semigroup/Bitraversable.hs src/Data/Semigroup/Semibitraversable.hs
+#mv src/Data/Semigroup/Traversable.hs src/Data/Semigroup/Semitraversable.hs
+#mv src/Data/Semigroup/Foldable.hs src/Data/Semigroup/Semifoldable.hs
+#cp -r src/Data/Semigroup/Foldable/ src/Data/Semigroup/Semifoldable/
+#rm -rf src/Data/Semigroup/Foldable/
+#cp -r src/Data/Semigroup/Traversable/ src/Data/Semigroup/Semitraversable/
+#rm -rf src/Data/Semigroup/Traversable/
+
+# MODULE NAMES (cabal file only)
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Bind/Semimonad/g' {} \; 
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Apply/Semiapplicative/g' {} \; 
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Foldable/Semifoldable/g' {} \; 
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Traversable/Semitraversable/g' {} \; 
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Bifoldable/Semibifoldable/g' {} \; 
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Bitraversable/Semibitraversable/g' {} \; 
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/BindTrans/SemimonadTrans/g' {} \;
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Data.Semifoldable.Instances/Data.Foldable.Instances/g' {} \;
+find ./semigroupoids.cabal -type f -exec sed -i -e 's/Data.Semitraversable.Instances/Data.Traversable.Instances/g' {} \;
+
+# TYPECLASS NAMES
+find ./src -type f -exec sed -i -e 's/Bind/Semimonad/g' {} \; 
+find ./src -type f -exec sed -i -e 's/Apply/Semiapplicative/g' {} \; 
+find ./src -type f -exec sed -i -e 's/Foldable1/Semifoldable/g' {} \; 
+find ./src -type f -exec sed -i -e 's/Traversable1/Semitraversable/g' {} \; 
+find ./src -type f -exec sed -i -e 's/Bifoldable1/Semibifoldable/g' {} \; 
+find ./src -type f -exec sed -i -e 's/Bitraversable1/Semibitraversable/g' {} \; 
+find ./src -type f -exec sed -i -e 's/BindTrans/SemimonadTrans/g' {} \;
+
+# TYPECLASS METHODS
+find ./src -type f -exec sed -i -e 's/fold1/semifold/g' {} \;
+find ./src -type f -exec sed -i -e 's/foldMap1/semifoldMap/g' {} \;
+
+find ./src -type f -exec sed -i -e 's/bitraverse1/semibitraverse/g' {} \;
+find ./src -type f -exec sed -i -e 's/bisequence1/semibisequence/g' {} \;
+
+find ./src -type f -exec sed -i -e 's/traverse1_/semitraverse_/g' {} \;
+find ./src -type f -exec sed -i -e 's/traverse1/semitraverse/g' {} \;
+find ./src -type f -exec sed -i -e 's/sequence1/semisequence/g' {} \;
+find ./src -type f -exec sed -i -e 's/sequenceA_/semisequenceA_/g' {} \;
+
+find ./src -type f -exec sed -i -e 's/bisequenceA1_/semibisequenceA_/g' {} \;
+
+find ./src -type f -exec sed -i -e 's/bifold1/semibifold/g' {} \;
+find ./src -type f -exec sed -i -e 's/bifoldMap1/semibifoldMap/g' {} \;
+
+find ./src -type f -exec sed -i -e 's/intercalate1/semiintercalate/g' {} \;
+find ./src -type f -exec sed -i -e 's/intercalateMap1/semiintercalateMap/g' {} \;
+find ./src -type f -exec sed -i -e 's/for1_/semifor_/g' {} \;
+find ./src -type f -exec sed -i -e 's/sequenceA1_/sequenceA_/g' {} \;
+find ./src -type f -exec sed -i -e 's/foldMapDefault1/semifoldMapDefault/g' {} \;
+find ./src -type f -exec sed -i -e 's/asum1/semiasum/g' {} \;
+
+find ./src -type f -exec sed -i -e 's/foldrM1/semifoldrM/g' {} \;
+find ./src -type f -exec sed -i -e 's/foldlM1/semifoldlM/g' {} \;
+
+# FIX MESSED UP IMPORTS
+find ./src -type f -exec sed -i -e 's/Data.Semibifoldable/Data.Bifoldable/g' {} \;
+find ./src -type f -exec sed -i -e 's/Data.Semibitraversable/Data.Bitraversable/g' {} \;
+find ./src -type f -exec sed -i -e 's/class Semibifoldable t => /class Bifoldable t => /g' {} \;
+find ./src -type f -exec sed -i -e 's/class Semibitraversable t => /class Bitraversable t => /g' {} \;
+
+# FIX MESSED UP BI-*
+find ./src -type f -exec sed -i -e 's/bisemi/semibi/g' {} \;

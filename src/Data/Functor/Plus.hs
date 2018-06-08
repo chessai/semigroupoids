@@ -38,9 +38,9 @@ import qualified Control.Monad.Trans.Writer.Strict as Strict
 import qualified Control.Monad.Trans.RWS.Lazy as Lazy
 import qualified Control.Monad.Trans.State.Lazy as Lazy
 import qualified Control.Monad.Trans.Writer.Lazy as Lazy
-import Data.Functor.Apply
+import Data.Functor.Semiapplicative
 import Data.Functor.Alt
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Compose
 import Data.Functor.Product
 import Data.Functor.Reverse
@@ -129,16 +129,16 @@ instance Plus f => Plus (IdentityT f) where
 instance Plus f => Plus (ReaderT e f) where
   zero = ReaderT $ \_ -> zero
 
-instance (Bind f, Monad f) => Plus (MaybeT f) where
+instance (Semimonad f, Monad f) => Plus (MaybeT f) where
   zero = MaybeT $ return zero
 
-instance (Bind f, Monad f, Error e) => Plus (ErrorT e f) where
+instance (Semimonad f, Monad f, Error e) => Plus (ErrorT e f) where
   zero = ErrorT $ return $ Left noMsg
 
-instance (Bind f, Monad f, Semigroup e, Monoid e) => Plus (ExceptT e f) where
+instance (Semimonad f, Monad f, Semigroup e, Monoid e) => Plus (ExceptT e f) where
   zero = ExceptT $ return $ Left mempty
 
-instance (Apply f, Applicative f) => Plus (ListT f) where
+instance (Semiapplicative f, Applicative f) => Plus (ListT f) where
   zero = ListT $ pure []
 
 instance Plus f => Plus (Strict.StateT e f) where

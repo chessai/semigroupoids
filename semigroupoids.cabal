@@ -1,6 +1,6 @@
 name:          semigroupoids
 category:      Control, Comonads
-version:       5.3
+version:       6.0
 license:       BSD3
 cabal-version: >= 1.8
 license-file:  LICENSE
@@ -37,29 +37,29 @@ description:
   .
   When working with comonads you often have the @\<*\>@ portion of an @Applicative@, but
   not the @pure@. This was captured in Uustalu and Vene's \"Essence of Dataflow Programming\"
-  in the form of the @ComonadZip@ class in the days before @Applicative@. Apply provides a weaker invariant, but for the comonads used for data flow programming (found in the streams package), this invariant is preserved. Applicative function composition forms a semigroupoid.
+  in the form of the @ComonadZip@ class in the days before @Applicative@. Semiapplicative provides a weaker invariant, but for the comonads used for data flow programming (found in the streams package), this invariant is preserved. Applicative function composition forms a semigroupoid.
   .
   Similarly many structures are nearly a comonad, but not quite, for instance lists provide a reasonable 'extend' operation in the form of 'tails', but do not always contain a value.
   .
   Ideally the following relationships would hold:
   .
-  > Foldable ----> Traversable <--- Functor ------> Alt ---------> Plus           Semigroupoid
+  > Semifoldable ----> Semitraversable <--- Functor ------> Alt ---------> Plus           Semigroupoid
   >      |               |            |                              |                  |
   >      v               v            v                              v                  v
-  > Foldable1 ---> Traversable1     Apply --------> Applicative -> Alternative      Category
+  > Semifoldable1 ---> Semitraversable1     Semiapplicative --------> Applicative -> Alternative      Category
   >                                   |               |              |                  |
   >                                   v               v              v                  v
-  >                                 Bind ---------> Monad -------> MonadPlus          Arrow
+  >                                 Semimonad ---------> Monad -------> MonadPlus          Arrow
   >
   .
-  Apply, Bind, and Extend (not shown) give rise the Static, Kleisli and Cokleisli semigroupoids respectively.
+  Semiapplicative, Semimonad, and Extend (not shown) give rise the Static, Kleisli and Cokleisli semigroupoids respectively.
   .
   This lets us remove many of the restrictions from various monad transformers
   as in many cases the binding operation or @\<*\>@ operation does not require them.
   .
   Finally, to work with these weaker structures it is beneficial to have containers
-  that can provide stronger guarantees about their contents, so versions of 'Traversable'
-  and 'Foldable' that can be folded with just a 'Semigroup' are added.
+  that can provide stronger guarantees about their contents, so versions of 'Semitraversable'
+  and 'Semifoldable' that can be folded with just a 'Semigroup' are added.
 
 source-repository head
   type: git
@@ -172,22 +172,22 @@ library
   hs-source-dirs: src
 
   exposed-modules:
-    Data.Bifunctor.Apply
+    Data.Bifunctor.Semiapplicative
     Data.Functor.Alt
-    Data.Functor.Apply
-    Data.Functor.Bind
-    Data.Functor.Bind.Class
-    Data.Functor.Bind.Trans
+    Data.Functor.Semiapplicative
+    Data.Functor.Semimonad
+    Data.Functor.Semimonad.Class
+    Data.Functor.Semimonad.Trans
     Data.Functor.Extend
     Data.Functor.Plus
     Data.Groupoid
     Data.Isomorphism
-    Data.Semigroup.Bifoldable
-    Data.Semigroup.Bitraversable
-    Data.Semigroup.Foldable
-    Data.Semigroup.Foldable.Class
-    Data.Semigroup.Traversable
-    Data.Semigroup.Traversable.Class
+    Data.Semigroup.Semibifoldable
+    Data.Semigroup.Semibitraversable
+    Data.Semigroup.Semifoldable
+    Data.Semigroup.Semifoldable.Class
+    Data.Semigroup.Semitraversable
+    Data.Semigroup.Semitraversable.Class
     Data.Semigroupoid
     Data.Semigroupoid.Dual
     Data.Semigroupoid.Ob

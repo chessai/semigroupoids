@@ -25,7 +25,7 @@
 module Data.Functor.Alt
   ( Alt(..)
   , optional
-  , module Data.Functor.Apply
+  , module Data.Functor.Semiapplicative
   ) where
 
 import Control.Applicative hiding (some, many, optional)
@@ -46,8 +46,8 @@ import qualified Control.Monad.Trans.Writer.Strict as Strict
 import qualified Control.Monad.Trans.RWS.Lazy as Lazy
 import qualified Control.Monad.Trans.State.Lazy as Lazy
 import qualified Control.Monad.Trans.Writer.Lazy as Lazy
-import Data.Functor.Apply
-import Data.Functor.Bind
+import Data.Functor.Semiapplicative
+import Data.Functor.Semimonad
 import Data.Functor.Compose
 import Data.Functor.Product
 import Data.Functor.Reverse
@@ -106,7 +106,7 @@ infixl 3 <!>
 -- When and if MonadPlus is successfully refactored, this class should also
 -- be refactored to remove these instances.
 --
--- The right distributive law should extend in the cases where the a 'Bind' or 'Monad' is
+-- The right distributive law should extend in the cases where the a 'Semimonad' or 'Monad' is
 -- provided to yield variations of the right distributive law:
 --
 -- > (m <!> n) >>- f = (m >>- f) <!> (m >>- f)
@@ -212,28 +212,28 @@ instance Alt f => Alt (IdentityT f) where
 instance Alt f => Alt (ReaderT e f) where
   ReaderT a <!> ReaderT b = ReaderT $ \e -> a e <!> b e
 
-instance (Bind f, Monad f) => Alt (MaybeT f) where
+instance (Semimonad f, Monad f) => Alt (MaybeT f) where
   MaybeT a <!> MaybeT b = MaybeT $ do
     v <- a
     case v of
       Nothing -> b
       Just _ -> return v
 
-instance (Bind f, Monad f) => Alt (ErrorT e f) where
+instance (Semimonad f, Monad f) => Alt (ErrorT e f) where
   ErrorT m <!> ErrorT n = ErrorT $ do
     a <- m
     case a of
       Left _ -> n
       Right r -> return (Right r)
 
-instance (Bind f, Monad f, Semigroup e) => Alt (ExceptT e f) where
+instance (Semimonad f, Monad f, Semigroup e) => Alt (ExceptT e f) where
   ExceptT m <!> ExceptT n = ExceptT $ do
     a <- m
     case a of
       Left e -> liftM (either (Left . (<>) e) Right) n
       Right x -> return (Right x)
 
-instance Apply f => Alt (ListT f) where
+instance Semiapplicative f => Alt (ListT f) where
   ListT a <!> ListT b = ListT $ (<!>) <$> a <.> b
 
 instance Alt f => Alt (Strict.StateT e f) where

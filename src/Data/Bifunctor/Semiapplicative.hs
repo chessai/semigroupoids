@@ -9,7 +9,7 @@
 -- Portability :  portable
 --
 ----------------------------------------------------------------------------
-module Data.Bifunctor.Apply (
+module Data.Bifunctor.Semiapplicative (
   -- * Biappliable bifunctors
     Bifunctor(..)
   , Biapply(..)
@@ -19,7 +19,7 @@ module Data.Bifunctor.Apply (
   , bilift3
   ) where
 
-import Data.Functor.Bind.Class
+import Data.Functor.Semimonad.Class
 import Data.Biapplicative
 
 infixl 4 <<..>>
